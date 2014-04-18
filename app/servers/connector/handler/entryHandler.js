@@ -22,8 +22,30 @@ var id = 1;
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
-    console.log(this.serverId);
+    var rescode = this.app.get('resCode');
 
+    console.log("session id : " + session.uid);
+    if(!!session.uid){
+        var data = {
+            result : rescode['result success'],
+            playerid : session.uid
+        };
+        next(null,data,null);
+        return;
+    }
+    else{
+        if(!msg.username){
+            console.log("proto param err");
+            var data = {
+                result : rescode['svr err'],
+                playerid : 0
+            };
+            next(null,data,null); 
+            return;
+        }        
+    }
+
+    
     var self = this;
     var playerid = parseInt(this.serverId + id, 10);
     id += 1;
@@ -31,8 +53,8 @@ Handler.prototype.entry = function(msg, session, next) {
     session.bind(playerid);
     session.set('serverId', this.serverId);
     var data = {
-        result:100,
-        playerid:playerid
+        result : rescode['result success'],
+        playerid : playerid
     };
 
     async.waterfall( [
@@ -43,24 +65,24 @@ Handler.prototype.entry = function(msg, session, next) {
             if(!!res){
                 console.log("get user res : "+ res);
                 session.set('username', msg.username);
-                session.set('passwd',msg.passwd);
+                session.set('token',msg.token);
                 next(null,data,null);
                 return;
             }
             else{
-               userDao.createUser(msg.username,msg.passwd,cb); 
+               userDao.createUser(msg.username,msg.token,cb); 
             }
         },
         function (cb) { 
             session.set('username', msg.username);
-            session.set('passwd',msg.passwd);
+            session.set('token',msg.passwd);
             cb(null);
         }
         ],
         function ( err ) { 
             if(err){
                  console.error("error message - " + err);
-                 next(null,{result:200});
+                 next(null,{result : rescode['svr err']});
                  return;
             }
             console.log("enter sucess!");

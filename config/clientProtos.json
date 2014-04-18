@@ -1,18 +1,19 @@
 {
-    "reqMsgHead":{
-        "required uInt32 magic" : 1,
+    "message ReqMsgHead" : {
+        "required uInt32 magic" : 1 ,
         "required uInt32 playerid" : 2
     },
 
     "connector.entryHandler.entry" : {
-        "required reqMsgHead head" : 1,
-        "required string username" : 2,
+        "required ReqMsgHead head" : 1 ,
+        "required string username" : 2 ,
         "required string token" : 3
     },
 
     "connector.enterHandler.create" : {
-        "required reqMsgHead head" : 1,
-        "required string nickname" , 2,
-        "required uInt32 gender" : 3 , 
+        "required ReqMsgHead head" : 1,
+        "required string nickname" : 2,
+        "required uInt32 gender" : 3  
     }
 }
+

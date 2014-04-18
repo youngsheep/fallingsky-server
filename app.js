@@ -9,7 +9,8 @@ app.set('name', 'hello');
 // configure for global
 app.configure('production|development', function() {
     app.loadConfig('redis', app.getBase() + '/config/redis.json');
-	app.filter(pomelo.filters.timeout());
+    app.loadConfig('resCode',app.getBase()+'/share/config/resCode.json');
+    app.filter(pomelo.filters.timeout());
 });
 
 // app configuration

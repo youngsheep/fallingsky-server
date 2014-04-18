@@ -3,7 +3,9 @@ module.exports = function(id){
     return new Battle(id);
 };
 var Battle = function(id){
-    this.battleid = id;
+    this.battleKey = Key;
+    this.members = [];
+    this.mNum = 0;
 };
 
 Battle.prototype.setBattleMember = function(m1,m2){

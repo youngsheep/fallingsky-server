@@ -3,9 +3,9 @@ var utils = require('../util/utils');
 
 var userDao = module.exports;
 
-userDao.createUser = function(username,passwd,cb){
+userDao.createUser = function(username,token,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
-        client.hsetnx("users",username ,passwd,function(err,res){
+        client.hsetnx("users",username ,token,function(err,res){
             release();
 
             if (err) {       
