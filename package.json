@@ -1,0 +1,16 @@
+{
+  "name": "fallingsky",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "pomelo":"0.9.5"
+    , "crc" : ">=0.0.1"
+    , "generic-pool": ">=1.0.9"
+    , "async": ">=0.0.1"
+    , "pomelo-collection": ">=0.1.0"
+    , "pomelo-logger": "0.1.2"
+    , "pomelo-sync-plugin": ">=0.0.1"
+    , "redis" : "0.10.1"
+  }
+}
+

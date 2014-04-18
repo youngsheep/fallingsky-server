@@ -1,0 +1,15 @@
+{
+    "connector.entryHandler.entry" : {
+        "required uInt32 result" : 1,
+        "required uInt32 playerid" : 2
+    },
+
+    "connector.enterHandler.create" : {
+        "required uInt32 result" : 1 , 
+    },
+
+    "battle.randomHandler.match" :{
+        "required uInt32 result" : 1,
+        "required uInt32 matchid" : 2
+    }
+} 
