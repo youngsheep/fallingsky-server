@@ -8,7 +8,7 @@ var Battle = function(id){
     this.mNum = 0;
 };
 
-Battle.prototype.setBattleMember = function(m1,m2){
-    this.m1 = m1;
-    this.m2 = m2;
+Battle.prototype.init = function(m1,m2){
+    this.mNum = this.members.push(m1);
+    this.mNum = this.members.push(m2);
 };

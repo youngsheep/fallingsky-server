@@ -3,32 +3,34 @@ var utils = require('../util/utils');
 
 var userDao = module.exports;
 
-userDao.createUser = function(username,token,cb){
+userDao.createPlayer = function(username,info,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
-        client.hsetnx("users",username ,token,function(err,res){
+        client.hmset("BaseInfo"+username, info ,function(err,res){
             release();
 
-            if (err) {       
-                console.error("error response - " + err);
-                utils.invokeCallback(cb, err);
-                return;
-            }
-            if(res === 1){
-                utils.invokeCallback(cb, null);
-            }
-            else{
-                utils.invokeCallback(cb, "user exists!");
-            }
+            console.log("create res : "+res);
+            utils.invokeCallback(cb, err);
         });
     });
 
 };
 
 
-userDao.getUserByName = function(name,cb){
+userDao.getPlayerBaseInfo = function(name,field,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
-        client.hget("users",name ,function(err,res){
+        client.hget("BaseInfo"+name,field,function(err,res){
             release();
+            utils.invokeCallback(cb, err, res);
+        });
+    });        
+};
+
+userDao.getPlayerAllBaseInfo = function(name,cb){
+    pomelo.app.get('dbclient').execute(function(client,release){
+        client.hgetall("BaseInfo"+name,function(err,res){
+            release();
+
+            console.log("getPlayerAllBaseInfo : " + res.username);
             utils.invokeCallback(cb, err, res);
         });
     });        

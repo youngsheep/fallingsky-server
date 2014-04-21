@@ -11,5 +11,9 @@
     "battle.randomHandler.match" :{
         "required sInt32 result" : 1,
         "required uInt32 matchid" : 2
+    },
+    
+    "battle.battleHandler.start" : {
+         "required sInt32 result" : 1
     }
 } 

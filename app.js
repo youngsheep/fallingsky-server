@@ -19,7 +19,7 @@ app.configure('production|development', 'connector', function(){
 		{
 			connector : pomelo.connectors.hybridconnector,
 			heartbeat : 30,
-			//useDict : true,
+			useDict : true,
 			useProtobuf : true,
                         handshake : function(msg, cb){
                                         console.log("handshake"+msg);

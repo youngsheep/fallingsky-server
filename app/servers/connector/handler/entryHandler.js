@@ -59,18 +59,22 @@ Handler.prototype.entry = function(msg, session, next) {
 
     async.waterfall( [
         function ( cb ){
-            userDao.getUserByName( msg.username, cb );
+            userDao.getPlayerAllBaseInfo( msg.username, cb );
         },
         function (res,cb){
-            if(!!res){
-                console.log("get user res : "+ res);
+            if(res.username === msg.username){
+                console.log("get user res : ");
+                console.log(res);
                 session.set('username', msg.username);
                 session.set('token',msg.token);
                 next(null,data,null);
                 return;
             }
             else{
-               userDao.createUser(msg.username,msg.token,cb); 
+                var info = {};
+                info.username = msg.username;
+                info.token = msg.token;
+                userDao.createPlayer(msg.username,info,cb); 
             }
         },
         function (cb) { 
@@ -82,7 +86,7 @@ Handler.prototype.entry = function(msg, session, next) {
         function ( err ) { 
             if(err){
                  console.error("error message - " + err);
-                 next(null,{result : rescode['svr err']});
+                 next(null,{result : rescode['svr err'], playerid:0});
                  return;
             }
             console.log("enter sucess!");
