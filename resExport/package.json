@@ -1,0 +1,11 @@
+{
+  "name": "resExport",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+      "node-xlsx" : "0.4.0" ,
+      "pomelo-protobuf": "0.4.0",
+      "commander": "2.2.0"
+  }
+}
+
