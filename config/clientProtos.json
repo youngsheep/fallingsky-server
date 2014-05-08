@@ -19,6 +19,14 @@
     "battle.battleHandler.start" : {
         "required ReqMsgHead head" : 1,
         "optional uInt32 type" : 2
+    },
+
+    "battle.battleHandler.cmd" : {
+        "required ReqMsgHead head" : 1,
+        "required sInt32 battleid" : 2,
+        "required uInt32 xPos" : 3,
+        "required uInt32 yPos" : 4,
+        "required uInt32 rotateFlag" : 5
     }
 }
 

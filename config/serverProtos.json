@@ -8,12 +8,24 @@
         "required sInt32 result" : 1  
     },
 
-    "battle.randomHandler.match" :{
-        "required sInt32 result" : 1,
-        "required uInt32 matchid" : 2
+    "battle.battleHandler.start" : {
+         "required sInt32 result" : 1,
+         "optional sInt32 battleid" : 2,
+         "optional sInt32 oppId" : 3,
+         "optional string oppName" : 4, 
+         "optional sInt32 firstBlock" : 5
+    },
+
+    "battle.battleHandler.cmd" : {
+         "required sInt32 result" : 1,
+         "repeat sInt32 clearLines" : 2,
+         "optional sInt32 nextType" : 3
     },
     
-    "battle.battleHandler.start" : {
-         "required sInt32 result" : 1
-    }
+    "oppstate" : {
+         "required sInt32 blockXPos" : 1,
+         "required sInt32 blockYPos" : 2,
+         "required sInt32 blockFlag" : 3,
+         "required sInt32 nextType" : 4
+    }    
 } 

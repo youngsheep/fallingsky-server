@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+
 var utils = module.exports;
 
 // control variable of func "myPrint"
@@ -81,4 +83,14 @@ utils.myPrint = function() {
   }
 };
 // print the file name and the line number ~ end
+
+utils.random = function(){
+    var rand = 0;
+    crypto.randomBytes(4, function(ex, buf) {  
+        rand = buf.buf.readUInt32BE(0);  
+        console.log(rand);
+    });  
+    
+    return rand;
+};
 
