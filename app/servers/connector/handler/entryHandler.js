@@ -57,6 +57,8 @@ Handler.prototype.entry = function(msg, session, next) {
         playerid : playerid
     };
 
+    var player = app.playerMgr.createPlayer(playerid,msg.username);
+
     async.waterfall( [
         function ( cb ){
             userDao.getPlayerAllBaseInfo( msg.username, cb );
@@ -65,6 +67,7 @@ Handler.prototype.entry = function(msg, session, next) {
             if(res.username === msg.username){
                 console.log("get user res : ");
                 console.log(res);
+                player.loadBaseInfo(res);
                 session.set('username', msg.username);
                 session.set('token',msg.token);
                 next(null,data,null);
@@ -74,6 +77,7 @@ Handler.prototype.entry = function(msg, session, next) {
                 var info = {};
                 info.username = msg.username;
                 info.token = msg.token;
+                player.loadBaseInfo(info);
                 userDao.createPlayer(msg.username,info,cb); 
             }
         },

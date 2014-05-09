@@ -1,6 +1,6 @@
 var pomelo = require('pomelo');
-var RandomMatchService = require('../../../service/randomMatchService');
 var userDao = require('../../../dao/userDao');
+var utils = require('../../../util/utils');
 var battleMgr = require('../../../domain/battle/battlemgr');
 
 module.exports = function(app) {
@@ -13,43 +13,40 @@ var Handler = function(app) {
         logger.error(app);
 };
 
-Handler.prototype.start = function(msg, session, next){
-    RandomMatchService.add(session.uid,function(matchid){
-        if(matchid !== -1)
-        {
-            var oppsessions = this.app.get("sessionService").getByUid(matchid);
-            if(oppsessions.length == 0){
-            }
-            oppsession = oppsessions[0];
+Handler.prototype.start = function(msg, session, next) {
+    console.log(this.app);
+    var matchid = utils.randMatch(session.uid); 
+    if(matchid !== -1)
+    {
+        var oppPlayer = this.app.playerMgr.getPlayerByID(matchid);
 
-            var battle = battleMgr.createBattle(session.uid,matchid);
-            oppsession.set("battleid",battle.id);
-            session.set("battleid",battle.id);
+        var battle = battleMgr.createBattle(session.uid,matchid);
+        oppsession.set("battleid",battle.id);
+        session.set("battleid",battle.id);
 
-            var data1 = {
-                result : 0,
-                battleid : battle.id,
-                oppId: matchid,
-                oppName : oppsession.get("username")
-            };
-            next(null,data1,null);
+        var data1 = {
+            result : 0,
+            battleid : battle.id,
+            oppId: matchid,
+            oppName : oppPlayer.username
+        };
+        next(null,data1,null);
 
-            var uid = {uid:matchid,sid: 'connector-server-'+oppsession.get('serverId') };
-            console.log(uid);
+        var uid = {uid:matchid,sid: 'connector-server-'+oppPlayer.sid };
+        console.log(uid);
 
-            var data2 = {
-                result : 0,
-                battleid : battle.id,
-                oppId: session.uid,
-                oppName : session.get("username")
-            };
-            pomelo.app.get('channelService').pushMessageByUids('battle.battleHandler.start', data2, [uid] , null);
-        }
-        else
-        {
-            next(null,{result:100},null);
-        }
-    });   
+        var data2 = {
+            result : 0,
+            battleid : battle.id,
+            oppId: session.uid,
+            oppName : session.get("username")
+        };
+        app.get('channelService').pushMessageByUids('battle.battleHandler.start', data2, [uid] , null);
+    }
+    else
+    {
+        next(null,{result:100},null);
+    }    
 };
 
 Handler.prototype.cmd = function(msg, session, next){
@@ -67,9 +64,9 @@ Handler.prototype.cmd = function(msg, session, next){
         bm.generateBlock();
         next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
 
-        var oppsessions = this.app.get("sessionService").getByUid(matchid);
-        if(oppsessions.length == 0){
-        }
+        var oppsessions = this.app.get('sessionService').getByUid(matchid);
+        //if(oppsessions.length === 0){
+        //}
         oppsession = oppsessions[0];
 
         var uid = {uid:bm.oppid,sid: 'connector-server-'+oppsession.get('serverId') };
@@ -81,10 +78,10 @@ Handler.prototype.cmd = function(msg, session, next){
             blockFlag: msg.rotateFlag,
             nextType : bm.curBlockType
         };
-        pomelo.app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);        
+        app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);        
     }
     else
     {
         next(null,{result:-3,clearLines:[]},null);
     }
-}
+};

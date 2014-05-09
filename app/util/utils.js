@@ -20,7 +20,7 @@ utils.invokeCallback = function(cb) {
  */
 utils.clone = function(origin) {
   if(!origin) {
-    return;
+    return null;
   }
 
   var obj = {};
@@ -94,3 +94,15 @@ utils.random = function(){
     return rand;
 };
 
+var first = -1;
+utils.randMatch = function(uid){
+    if(first !== -1) {
+        var matchid = first;
+        first = -1;
+        return matchid;
+    }
+    else {
+        first = uid;
+        return -1;
+    }
+};
