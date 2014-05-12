@@ -28,9 +28,15 @@ app.configure('production|development', 'connector', function(){
 		});
 });
 
-app.configure('production|development', 'connector|battle', function() {
-    app.set('playerMgr',require('app/service/playerMgr'),true);
+
+app.configure('production|development', 'battle', function() {
+    var BattleMgr = require('./app/service/battlemgr');
+    app.set('battleMgr',new BattleMgr(),true);
+
+    var PlayerMgr = require('./app/service/playerMgr');
+    app.set('playerMgr',new PlayerMgr(100),true);    
 });
+
 // Configure redis
 app.configure('production|development', 'connector|battle|master', function() {
 	var redisClient = require('./app/dao/redis/redis').init(app);

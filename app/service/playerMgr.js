@@ -1,14 +1,12 @@
 var Player = require('../domain/entity/player');
 
-module.exports = function(max){
-    return new PlayerMgr(max);
-};
-
 var PlayerMgr = function(max){
     this.maxPlayer = max;
     this.idMap = {};
     this.usernameMap = {};
 };
+
+module.exports = PlayerMgr;
 
 PlayerMgr.prototype.createPlayer = function(uid,username,sid){
     var player = new Player(uid,username,sid);

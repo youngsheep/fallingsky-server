@@ -1,14 +1,13 @@
-var Member = require('./battleMember');
-
-module.exports = function(){
-    return new BattleMgr();
-};
+var Member = require('../domain/entity/battleMember');
 
 var BattleMgr = function(){
     this.battles = {};
     this.battleId = 1;
     console.log("Battle mgr constuct");
 };
+
+
+module.exports = BattleMgr; 
 
 BattleMgr.prototype.getBattleById = function(id){
     return this.battles[id];

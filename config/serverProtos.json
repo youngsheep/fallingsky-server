@@ -8,7 +8,7 @@
         "required sInt32 result" : 1  
     },
 
-    "battle.battleHandler.start" : {
+    "game.battleHandler.start" : {
          "required sInt32 result" : 1,
          "optional sInt32 battleid" : 2,
          "optional sInt32 oppId" : 3,
@@ -16,7 +16,7 @@
          "optional sInt32 firstBlock" : 5
     },
 
-    "battle.battleHandler.cmd" : {
+    "game.battleHandler.cmd" : {
          "required sInt32 result" : 1,
          "repeat sInt32 clearLines" : 2,
          "optional sInt32 nextType" : 3

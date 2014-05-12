@@ -57,7 +57,8 @@ Handler.prototype.entry = function(msg, session, next) {
         playerid : playerid
     };
 
-    var player = app.playerMgr.createPlayer(playerid,msg.username);
+    var player = this.app.playerMgr.createPlayer(playerid,msg.username,this.serverId);
+    console.log(this.app.playerMgr.idMap);
 
     async.waterfall( [
         function ( cb ){

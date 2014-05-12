@@ -1,4 +1,4 @@
-var Player = function(username,uid,sid){
+var Player = function(uid,username,sid){
     this.username = username;
     this.uid = uid;
     this.sid = sid;

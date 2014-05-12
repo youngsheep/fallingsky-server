@@ -1,7 +1,6 @@
 var pomelo = require('pomelo');
 var userDao = require('../../../dao/userDao');
 var utils = require('../../../util/utils');
-var battleMgr = require('../../../domain/battle/battlemgr');
 
 module.exports = function(app) {
     return new Handler(app);
@@ -14,15 +13,16 @@ var Handler = function(app) {
 };
 
 Handler.prototype.start = function(msg, session, next) {
-    console.log(this.app);
+    console.log(this.app.playerMgr.idMap);
     var matchid = utils.randMatch(session.uid); 
     if(matchid !== -1)
     {
         var oppPlayer = this.app.playerMgr.getPlayerByID(matchid);
+        var player = this.app.playerMgr.getPlayerByID(session.uid);
 
-        var battle = battleMgr.createBattle(session.uid,matchid);
-        oppsession.set("battleid",battle.id);
-        session.set("battleid",battle.id);
+        var battle = this.app.battleMgr.createBattle(session.uid,matchid);
+        oppPlayer.battleid = battle.id;
+        player.battleid = battle.id;
 
         var data1 = {
             result : 0,
@@ -50,26 +50,26 @@ Handler.prototype.start = function(msg, session, next) {
 };
 
 Handler.prototype.cmd = function(msg, session, next){
-    if(msg.battleid !== session.get('battleid')){
-        next(null,{result:-1,clearLines:[]},null);
-    }
 
-    var battle = battleMgr.getBattleById(msg.battleid);
+    var battle = this.app.battleMgr.getBattleById(msg.battleid);
     if(!battle){
         next(null,{result:-2,clearLines:[]},null);
     }
-   
+    
+    var player = this.app.playerMgr.getPlayerByID(session.uid);
     var bm = battle.getMemberByUid(session.uid);
+
+    if(!player || !bm ){
+        next(null,{result:-1,clearLines:[]},null);
+    }
+
+    var oppid = bm.oppid;
+    var oppPlayer = this.app.playerMgr.getPlayerByID(battle.oppid);
+
     if(bm && bm.fillBlock(msg.xPos,msg.yPos,msg.rotateFlag)){
         bm.generateBlock();
-        next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
 
-        var oppsessions = this.app.get('sessionService').getByUid(matchid);
-        //if(oppsessions.length === 0){
-        //}
-        oppsession = oppsessions[0];
-
-        var uid = {uid:bm.oppid,sid: 'connector-server-'+oppsession.get('serverId') };
+        var uid = {uid:bm.oppid,sid: 'connector-server-'+oppPlayer.sid };
         console.log(uid);
 
         var data = {
@@ -79,6 +79,8 @@ Handler.prototype.cmd = function(msg, session, next){
             nextType : bm.curBlockType
         };
         app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);        
+
+        next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
     }
     else
     {
