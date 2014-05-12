@@ -40,7 +40,7 @@ Handler.prototype.entry = function(msg, session, next) {
     async.waterfall( [
         //TODO need auth rpc
         function ( cb ){
-            self.app.rpc.game.loginRemote.login({uid:playerid,username:msg.username,sid:this.serverid}, cb);
+            self.app.rpc.game.loginRemote.login(session,{uid:playerid, username:msg.username, sid:self.serverid}, cb);
         }
         ],
         function ( err ) { 

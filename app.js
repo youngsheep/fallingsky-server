@@ -23,13 +23,13 @@ app.configure('production|development', 'connector', function(){
 			useProtobuf : true,
                         handshake : function(msg, cb){
                                         console.log("handshake"+msg);
-				        cb(null, {});
+				                        cb(null, {});
                                     }
 		});
 });
 
 
-app.configure('production|development', 'battle', function() {
+app.configure('production|development', 'game', function() {
     var BattleMgr = require('./app/service/battlemgr');
     app.set('battleMgr',new BattleMgr(),true);
 

@@ -1,22 +1,18 @@
 var userDao = require('../../../dao/userDao');
 
 module.exports = function(app) {
-	return new LoginRemote(app, app.get('playerMgr'));
+	return new LoginRemote(app);
 };
 
-var LoginRemote = function(app, playerMgr) {
+var LoginRemote = function(app) {
 	this.app = app;
-	this.playerMgr = playerMgr;
 };
 
-/**
- *	Add player into channel
- */
 LoginRemote.prototype.login = function(info, cb) {
+    var self = this;
     userDao.getPlayerAllBaseInfo( info.username, function(err,res){
         var data = res;
 
-        console.log(info);
         if(!err){
             if(!res){
                 //TODO player creating need to generate handler
@@ -24,15 +20,15 @@ LoginRemote.prototype.login = function(info, cb) {
                 data.username = "aaa";
                 data.nickname = "yy";
                 data.portrait = "http://";
-                userDao.createPlayer(data.username,info,null);
+                userDao.createPlayer(data.username,data,null);
 
                 data = info;
             }
 
-            var player = this.playerMgr.addPlayer(info.uid,info,username,info.sid);
+            var player = self.app.playerMgr.addPlayer(info.uid,info.username,info.sid);
             player.loadBaseInfo(data);
         }
-
+       
         cb(err);
     });
 };
