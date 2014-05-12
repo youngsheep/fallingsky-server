@@ -8,7 +8,7 @@ var PlayerMgr = function(max){
 
 module.exports = PlayerMgr;
 
-PlayerMgr.prototype.createPlayer = function(uid,username,sid){
+PlayerMgr.prototype.addPlayer = function(uid,username,sid){
     var player = new Player(uid,username,sid);
     this.idMap[uid] = player;
     this.usernameMap[username] = player;

@@ -1,5 +1,5 @@
-var userDao = require('../../../dao/userDao');
 var async = require('async');
+var utils = require('../../../util/utils');
 
 module.exports = function(app) {
   return new Handler(app);
@@ -23,69 +23,24 @@ var id = 1;
  */
 Handler.prototype.entry = function(msg, session, next) {
     var rescode = this.app.get('resCode');
-
-    console.log("session id : " + session.uid);
-    if(!!session.uid){
-        var data = {
-            result : rescode['result success'],
-            playerid : session.uid
-        };
-        next(null,data,null);
-        return;
-    }
-    else{
-        if(!msg.username){
-            console.log("proto param err");
-            var data = {
-                result : rescode['svr err'],
-                playerid : 0
-            };
-            next(null,data,null); 
-            return;
-        }        
-    }
-
     
     var self = this;
+    var data = null;
+
     var playerid = parseInt(this.serverId + id, 10);
     id += 1;
     
     session.bind(playerid);
     session.set('serverId', this.serverId);
-    var data = {
+    data = {
         result : rescode['result success'],
         playerid : playerid
     };
 
-    var player = this.app.playerMgr.createPlayer(playerid,msg.username,this.serverId);
-    console.log(this.app.playerMgr.idMap);
-
     async.waterfall( [
+        //TODO need auth rpc
         function ( cb ){
-            userDao.getPlayerAllBaseInfo( msg.username, cb );
-        },
-        function (res,cb){
-            if(res.username === msg.username){
-                console.log("get user res : ");
-                console.log(res);
-                player.loadBaseInfo(res);
-                session.set('username', msg.username);
-                session.set('token',msg.token);
-                next(null,data,null);
-                return;
-            }
-            else{
-                var info = {};
-                info.username = msg.username;
-                info.token = msg.token;
-                player.loadBaseInfo(info);
-                userDao.createPlayer(msg.username,info,cb); 
-            }
-        },
-        function (cb) { 
-            session.set('username', msg.username);
-            session.set('token',msg.passwd);
-            cb(null);
+            self.app.rpc.game.loginRemote.login({uid:playerid,username:msg.username,sid:this.serverid}, cb);
         }
         ],
         function ( err ) { 

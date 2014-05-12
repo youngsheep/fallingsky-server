@@ -38,7 +38,7 @@ app.configure('production|development', 'battle', function() {
 });
 
 // Configure redis
-app.configure('production|development', 'connector|battle|master', function() {
+app.configure('production|development', 'connector|game|master', function() {
 	var redisClient = require('./app/dao/redis/redis').init(app);
 	app.set('dbclient', redisClient);
     app.use(sync, {sync: {path:__dirname + '/app/dao/mapping', dbclient: redisClient}});

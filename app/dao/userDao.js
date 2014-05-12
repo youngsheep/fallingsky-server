@@ -20,6 +20,9 @@ userDao.getPlayerBaseInfo = function(name,field,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
         client.hget("BaseInfo"+name,field,function(err,res){
             release();
+
+            console.log("getPlayerBaseInfo : ");
+            console.log(res);
             utils.invokeCallback(cb, err, res);
         });
     });        
@@ -30,8 +33,9 @@ userDao.getPlayerAllBaseInfo = function(name,cb){
         client.hgetall("BaseInfo"+name,function(err,res){
             release();
 
-            console.log("getPlayerAllBaseInfo : " + res.username);
+            console.log("getPlayerAllBaseInfo : ");
+            console.log(res);
             utils.invokeCallback(cb, err, res);
         });
-    });        
+    });
 };
