@@ -8,7 +8,7 @@ userDao.createPlayer = function(username,info,cb){
         client.hmset("BaseInfo"+username, info ,function(err,res){
             release();
 
-            console.log("create res : "+res);
+            utils.myPrint("create res : "+res);
             utils.invokeCallback(cb, err);
         });
     });
@@ -21,8 +21,7 @@ userDao.getPlayerBaseInfo = function(name,field,cb){
         client.hget("BaseInfo"+name,field,function(err,res){
             release();
 
-            console.log("getPlayerBaseInfo : ");
-            console.log(res);
+            utils.myPrint("getPlayerBaseInfo : ",res);
             utils.invokeCallback(cb, err, res);
         });
     });        
@@ -33,8 +32,7 @@ userDao.getPlayerAllBaseInfo = function(name,cb){
         client.hgetall("BaseInfo"+name,function(err,res){
             release();
 
-            console.log("getPlayerAllBaseInfo : ");
-            console.log(res);
+            utils.myPrint("getPlayerAllBaseInfo : " , res);
             utils.invokeCallback(cb, err, res);
         });
     });

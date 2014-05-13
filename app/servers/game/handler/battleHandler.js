@@ -13,7 +13,7 @@ var Handler = function(app) {
 };
 
 Handler.prototype.start = function(msg, session, next) {
-    console.log(this.app.playerMgr.idMap);
+    utils.myPrint(this.app.playerMgr.idMap);
     var matchid = utils.randMatch(session.uid); 
     if(matchid !== -1)
     {
@@ -24,24 +24,30 @@ Handler.prototype.start = function(msg, session, next) {
         oppPlayer.battleid = battle.id;
         player.battleid = battle.id;
 
+        var bm = battle.getMemberByUid(session.uid);
+        bm.generateBlock();
         var data1 = {
             result : 0,
             battleid : battle.id,
             oppId: matchid,
-            oppName : oppPlayer.username
+            oppName : oppPlayer.username,
+            firstBlock : bm.curBlockType
         };
         next(null,data1,null);
 
         var uid = {uid:matchid,sid: 'connector-server-'+oppPlayer.sid };
         console.log(uid);
 
+        var oppbm = battle.getMemberByUid(matchid);
+        oppbm.generateBlock();
         var data2 = {
             result : 0,
             battleid : battle.id,
             oppId: session.uid,
-            oppName : session.get("username")
+            oppName : player.username,
+            firstBlock : oppbm.curBlockType
         };
-        app.get('channelService').pushMessageByUids('battle.battleHandler.start', data2, [uid] , null);
+        this.app.get('channelService').pushMessageByUids('game.battleHandler.start', data2, [uid] , null);
     }
     else
     {
@@ -78,7 +84,7 @@ Handler.prototype.cmd = function(msg, session, next){
             blockFlag: msg.rotateFlag,
             nextType : bm.curBlockType
         };
-        app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);        
+        this.app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);        
 
         next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
     }

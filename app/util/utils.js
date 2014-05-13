@@ -3,8 +3,8 @@ var crypto = require('crypto');
 var utils = module.exports;
 
 // control variable of func "myPrint"
-var isPrintFlag = false;
-// var isPrintFlag = true;
+// var isPrintFlag = false;
+var isPrintFlag = true;
 
 /**
  * Check and invoke callback function
@@ -77,7 +77,7 @@ utils.myPrint = function() {
     var stack = getStack();
     var aimStr = '\'' + getFileName(stack) + '\' @' + getLineNumber(stack) + ' :\n';
     for(var i = 0; i < len; ++i) {
-      aimStr += arguments[i] + ' ';
+        aimStr += JSON.stringify(arguments[i]) + ' ';
     }
     console.log('\n' + aimStr);
   }
@@ -87,7 +87,7 @@ utils.myPrint = function() {
 utils.random = function(){
     var rand = 0;
     crypto.randomBytes(4, function(ex, buf) {  
-        rand = buf.buf.readUInt32BE(0);  
+        rand = buf.readUInt32BE(0);  
         console.log(rand);
     });  
     

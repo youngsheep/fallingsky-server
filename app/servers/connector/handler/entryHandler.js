@@ -40,20 +40,20 @@ Handler.prototype.entry = function(msg, session, next) {
     async.waterfall( [
         //TODO need auth rpc
         function ( cb ){
-            self.app.rpc.game.loginRemote.login(session,{uid:playerid, username:msg.username, sid:self.serverid}, cb);
+            self.app.rpc.game.loginRemote.login(session,{uid:playerid, username:msg.username, sid:self.serverId}, cb);
         }
         ],
         function ( err ) { 
             if(err){
-                 console.error("error message - " + err);
+                 utils.myPrint("error message - " , err);
                  next(null,{result : rescode['svr err'], playerid:0});
                  return;
             }
-            console.log("enter sucess!");
+            utils.myPrint("enter sucess!");
             next(null,data,null);
         }
     );
 
-    console.log("entry end!");
+    utils.myPrint("entry end!");
 };
 
