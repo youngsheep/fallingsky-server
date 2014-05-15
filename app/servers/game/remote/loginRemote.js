@@ -14,22 +14,20 @@ LoginRemote.prototype.login = function(info, cb) {
         var data = res;
 
         if(!err){
+            var player = self.app.playerMgr.addPlayer(info.uid,info.username,info.fid);            
             if(!res){
-                //TODO player creating need to generate handler
-                data = {};
-                data.username = "aaa";
-                data.nickname = "yy";
-                data.portrait = "http://";
-                userDao.createPlayer(data.username,data,null);
-
-                data = info;
+                //if need auto register new player,write here
+                cb(null,100);
             }
+            else{
 
-            var player = self.app.playerMgr.addPlayer(info.uid,info.username,info.sid);
-            player.loadBaseInfo(data);
+                player.loadBaseInfo(data);
+                cb(null,0);
+            }
         }
-       
-        cb(err);
+        else{
+            cb(err);
+        }
     });
 };
 
@@ -39,8 +37,8 @@ LoginRemote.prototype.login = function(info, cb) {
  * channelName
  */
 LoginRemote.prototype.leave =function(uid, channelName, cb){
-	this.chatService(uid, channelName);
-	cb();
+    //this.app.playerMgr.(uid, channelName);
+    cb();
 };
 
 /**
@@ -48,6 +46,6 @@ LoginRemote.prototype.leave =function(uid, channelName, cb){
  *
  */
 LoginRemote.prototype.kick = function(uid, cb){
-	this.chatService.kick(uid);
-	cb();
+    this.chatService.kick(uid);
+    cb();
 };

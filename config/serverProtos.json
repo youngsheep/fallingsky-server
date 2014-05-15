@@ -4,8 +4,17 @@
         "required uInt32 playerid" : 2
     },
 
-    "connector.enterHandler.create" : {
+    "game.roleHandler.register" : {
         "required sInt32 result" : 1  
+    },
+
+    "game.roleHandler.info" : {
+        "required sInt32 result" : 1
+    },
+
+    "roleBaseInfo" : {
+        "required string nickname" : 1,
+        "optional string portrait" : 2
     },
 
     "game.battleHandler.start" : {

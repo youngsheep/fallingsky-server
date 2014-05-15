@@ -22,6 +22,8 @@ var id = 1;
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
+    console.log(session);
+
     var rescode = this.app.get('resCode');
     
     var self = this;
@@ -40,7 +42,17 @@ Handler.prototype.entry = function(msg, session, next) {
     async.waterfall( [
         //TODO need auth rpc
         function ( cb ){
-            self.app.rpc.game.loginRemote.login(session,{uid:playerid, username:msg.username, sid:self.serverId}, cb);
+            self.app.rpc.game.loginRemote.login(session,{uid:playerid, username:msg.username, fid:session.frontendId}, cb);
+        },
+        function( result , cb){
+            data = {
+                result :result,
+                playerid : playerid
+            };
+            next(null,data,null);
+
+            session.on('closed', onUserLeave.bind(null, self.app));
+            return;
         }
         ],
         function ( err ) { 
@@ -53,7 +65,18 @@ Handler.prototype.entry = function(msg, session, next) {
             next(null,data,null);
         }
     );
+};
 
-    utils.myPrint("entry end!");
+var onUserLeave = function (app, session, reason) {
+	if(!session || !session.uid) {
+		return;
+	}
+
+	utils.myPrint('1 ~ OnUserLeave is running ...');
+	app.rpc.game.loginRemote.leave(session, {playerId: session.uid}, function(err){
+		if(!!err){
+			logger.error('user leave error! %j', err);
+		}
+	});
 };
 

@@ -13,7 +13,7 @@ var Handler = function(app) {
 };
 
 Handler.prototype.start = function(msg, session, next) {
-    utils.myPrint(this.app.playerMgr.idMap);
+    console.log(session);
     var matchid = utils.randMatch(session.uid); 
     if(matchid !== -1)
     {
