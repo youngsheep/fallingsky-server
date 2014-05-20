@@ -80,6 +80,15 @@ BattleMemeber.prototype.fillBlock = function(x, y, flag){
             }
         }
     }
+
+    var pstr = "\n";
+    for(var yy = 0; yy < 20;yy++){
+        for(var xx = 0;xx < 14; xx++){
+            pstr = pstr+this.blocks[yy][xx];
+        }
+        pstr = pstr+"\n";
+    }
+    console.log(pstr);
     return true;
 };
 
