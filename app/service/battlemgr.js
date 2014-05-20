@@ -18,7 +18,7 @@ BattleMgr.prototype.createBattle = function(firstId,secondId){
     battle.addMember(firstId,secondId);
     battle.addMember(secondId,firstId);
     
-    this.battles[this.battlid] = battle;
+    this.battles[this.battleId] = battle;
     ++this.battleId;
     return battle;
 };

@@ -1,3 +1,4 @@
+var userDao = require('../../../dao/userDao');
 
 module.exports = function(app) {
     return new Handler(app);
@@ -9,7 +10,11 @@ var Handler = function(app) {
         logger.error(app);
 };
 
-Handler.prototype.regsiter = function(msg, session, next) {
+Handler.prototype.register = function(msg, session, next) {
+    if(!msg.head.username){
+        next(null,{result:-2},null);
+        return;
+    }
     var self = this;
     var data = {};
     data.username = msg.head.username;
@@ -17,7 +22,7 @@ Handler.prototype.regsiter = function(msg, session, next) {
     data.portrait = "http://";
     userDao.createPlayer(data.username,data,function(err){
         if(!err){
-            var player = self.app.playerMgr.getPlayerById(session.uid);
+            var player = self.app.playerMgr.getPlayerByID(session.uid);
             if(!player){
                 player = self.app.playerMgr.addPlayer(session.uid,data.username,session.fontendId);
             }            
@@ -32,6 +37,7 @@ Handler.prototype.regsiter = function(msg, session, next) {
 
 Handler.prototype.info = function(msg, session, next) {
     var player = this.app.playerMgr.getPlayerByName(msg.head.username);
+    console.log(player);
     if(!player || player.uid !== session.uid){
         next(null,{result:-1},null);
         return;

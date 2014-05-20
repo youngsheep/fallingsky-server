@@ -5,10 +5,10 @@ var userDao = module.exports;
 
 userDao.createPlayer = function(username,info,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
-        client.hmset("BaseInfo"+username, info ,function(err,res){
+        client.hmset("base-info-"+username, info ,function(err,res){
             release();
 
-            utils.myPrint("create res : "+res);
+            utils.myPrint(info,"   create res : ",res);
             utils.invokeCallback(cb, err);
         });
     });
@@ -18,7 +18,7 @@ userDao.createPlayer = function(username,info,cb){
 
 userDao.getPlayerBaseInfo = function(name,field,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
-        client.hget("BaseInfo"+name,field,function(err,res){
+        client.hget("base-info-"+name,field,function(err,res){
             release();
 
             utils.myPrint("getPlayerBaseInfo : ",res);
@@ -29,10 +29,10 @@ userDao.getPlayerBaseInfo = function(name,field,cb){
 
 userDao.getPlayerAllBaseInfo = function(name,cb){
     pomelo.app.get('dbclient').execute(function(client,release){
-        client.hgetall("BaseInfo"+name,function(err,res){
+        client.hgetall("base-info-"+name,function(err,res){
             release();
 
-            utils.myPrint("getPlayerAllBaseInfo : " , res);
+            utils.myPrint("name:",name, " error :",err , "   getPlayerAllBaseInfo : " , res);
             utils.invokeCallback(cb, err, res);
         });
     });

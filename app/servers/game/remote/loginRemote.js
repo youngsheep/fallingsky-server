@@ -1,4 +1,5 @@
 var userDao = require('../../../dao/userDao');
+var utils = require('../../../util/utils');
 
 module.exports = function(app) {
 	return new LoginRemote(app);
@@ -9,6 +10,7 @@ var LoginRemote = function(app) {
 };
 
 LoginRemote.prototype.login = function(info, cb) {
+    utils.myPrint(info);
     var self = this;
     userDao.getPlayerAllBaseInfo( info.username, function(err,res){
         var data = res;
@@ -36,16 +38,8 @@ LoginRemote.prototype.login = function(info, cb) {
  * uid
  * channelName
  */
-LoginRemote.prototype.leave =function(uid, channelName, cb){
-    //this.app.playerMgr.(uid, channelName);
+LoginRemote.prototype.leave =function(uid, cb){
+    this.app.playerMgr.removePlayer(uid);
     cb();
 };
 
-/**
- * kick out user
- *
- */
-LoginRemote.prototype.kick = function(uid, cb){
-    this.chatService.kick(uid);
-    cb();
-};
