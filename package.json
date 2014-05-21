@@ -11,6 +11,8 @@
     , "pomelo-logger": "0.1.2"
     , "pomelo-sync-plugin": ">=0.0.1"
     , "redis" : "0.10.1"
+    , "querystring" : "0.2.0"
+    , "request" : "2.36.0"    
   }
 }
 

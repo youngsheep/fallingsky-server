@@ -5,6 +5,9 @@
     ],
     "game": [
       {"id": "game-server-1", "host": "127.0.0.1", "port": 3160}
+    ],
+    "weibo": [
+      {"id": "weibo-server-1", "host": "127.0.0.1", "port": 3170}
     ]
   },
   "production":{

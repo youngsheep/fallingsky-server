@@ -16,8 +16,8 @@ Handler.prototype.start = function(msg, session, next) {
     var matchid = utils.randMatch(session.uid); 
     if(matchid !== -1)
     {
-        var oppPlayer = this.app.playerMgr.getPlayerByID(matchid);
-        var player = this.app.playerMgr.getPlayerByID(session.uid);
+        var oppPlayer = this.app.playerMgr.getPlayerByPid(matchid);
+        var player = this.app.playerMgr.getPlayerByPid(session.uid);
 
         var battle = this.app.battleMgr.createBattle(session.uid,matchid);
         oppPlayer.battleid = battle.id;
@@ -62,7 +62,7 @@ Handler.prototype.cmd = function(msg, session, next){
         return;
     }
     
-    var player = this.app.playerMgr.getPlayerByID(session.uid);
+    var player = this.app.playerMgr.getPlayerByPid(session.uid);
     var bm = battle.getMemberByUid(session.uid);
 
     if(!player || !bm ){
@@ -70,7 +70,7 @@ Handler.prototype.cmd = function(msg, session, next){
     }
 
     var oppid = bm.oppid;
-    var oppPlayer = this.app.playerMgr.getPlayerByID(oppid);
+    var oppPlayer = this.app.playerMgr.getPlayerByPid(oppid);
 
     if(bm && bm.fillBlock(msg.xPos,msg.yPos,msg.rotateFlag)){
         bm.generateBlock();

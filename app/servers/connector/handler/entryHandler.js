@@ -22,7 +22,7 @@ var id = 1;
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
-    if(!msg.head.username){
+    if(!msg.head.uid){
         next(null,{result:-2},null);
         return;
     }
@@ -30,28 +30,28 @@ Handler.prototype.entry = function(msg, session, next) {
     var rescode = this.app.get('resCode');
     
     var self = this;
-    var data = null;
 
     var playerid = parseInt(this.serverId + id, 10);
     id += 1;
     
     session.bind(playerid);
     session.set('serverId', this.serverId);
-    data = {
+    var data = {
         result : rescode['result success'],
-        playerid : playerid
+        pid : playerid
     };
 
     async.waterfall( [
-        //TODO need auth rpc
         function ( cb ){
-            self.app.rpc.game.loginRemote.login(session,{uid:playerid, username:msg.head.username, fid:session.frontendId}, cb);
+            self.app.rpc.weibo.authRemote.auth(session,{token:msg.token, uid:msg.head.uid}, cb);
+        },        
+        function ( userinfo, cb ){
+            data.nickname = userinfo.nickname;
+            self.app.rpc.game.loginRemote.login(session,
+                {pid:playerid, uid:msg.head.uid, fid:session.frontendId , data:userinfo}, cb);
         },
         function( result , cb){
-            data = {
-                result :result,
-                playerid : playerid
-            };
+            data.result = result;
             next(null,data,null);
 
             session.on('closed', onUserLeave.bind(null, self.app));
@@ -61,7 +61,7 @@ Handler.prototype.entry = function(msg, session, next) {
         function ( err ) { 
             if(err){
                  utils.myPrint("error message - " , err);
-                 next(null,{result : rescode['svr err'], playerid:0});
+                 next(null,{result : rescode['svr err']});
                  return;
             }
             utils.myPrint("enter sucess!");

@@ -11,21 +11,20 @@ var Handler = function(app) {
 };
 
 Handler.prototype.register = function(msg, session, next) {
-    if(!msg.head.username){
+    if(!msg.head.uid){
         next(null,{result:-2},null);
         return;
     }
     var self = this;
     var data = {};
-    data.username = msg.head.username;
+    data.uid = msg.head.uid;
     data.nickname = msg.nickname;
-    data.portrait = "http://";
-    userDao.createPlayer(data.username,data,function(err){
+    userDao.createPlayer(data.uid,data,function(err){
         if(!err){
-            var player = self.app.playerMgr.getPlayerByID(session.uid);
+            var player = self.app.playerMgr.getPlayerByPid(session.uid);
             if(!player){
-                player = self.app.playerMgr.addPlayer(session.uid,data.username,session.fontendId);
-            }            
+                player = self.app.playerMgr.addPlayer(session.uid,data.uid,session.fontendId);
+            }
             player.loadBaseInfo(data);
             next(null,{result:0},null);
         }
@@ -36,16 +35,16 @@ Handler.prototype.register = function(msg, session, next) {
 };
 
 Handler.prototype.info = function(msg, session, next) {
-    var player = this.app.playerMgr.getPlayerByName(msg.head.username);
+    var player = this.app.playerMgr.getPlayerByUid(msg.head.uid);
     console.log(player);
-    if(!player || player.uid !== session.uid){
+    if(!player || player.pid !== session.uid){
         next(null,{result:-1},null);
         return;
     } 
 
     var uid = {uid:session.uid,sid:player.fid };
     var data = {nickname:player.nickname,portrait:player.portrait};
-    this.app.get('channelService').pushMessageByUids('roleBaseInfo', data, [uid] , null);
-
-    next(null,{result:0},null);
+    this.app.get('channelService').pushMessageByUids('roleBaseInfo', data, [uid] , function(){
+        next(null,{result:0},null);    
+    });
 };

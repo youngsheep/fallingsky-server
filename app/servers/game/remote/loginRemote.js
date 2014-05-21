@@ -12,17 +12,17 @@ var LoginRemote = function(app) {
 LoginRemote.prototype.login = function(info, cb) {
     utils.myPrint(info);
     var self = this;
-    userDao.getPlayerAllBaseInfo( info.username, function(err,res){
+    userDao.getPlayerAllBaseInfo( info.uid, function(err,res){
         var data = res;
 
         if(!err){
-            var player = self.app.playerMgr.addPlayer(info.uid,info.username,info.fid);            
+            var player = self.app.playerMgr.addPlayer(info.pid,info.uid,info.fid);
+            player.loadOtherInfo(info.data);
             if(!res){
                 //if need auto register new player,write here
                 cb(null,100);
             }
             else{
-
                 player.loadBaseInfo(data);
                 cb(null,0);
             }
@@ -38,8 +38,8 @@ LoginRemote.prototype.login = function(info, cb) {
  * uid
  * channelName
  */
-LoginRemote.prototype.leave =function(uid, cb){
-    this.app.playerMgr.removePlayer(uid);
+LoginRemote.prototype.leave =function(pid, cb){
+    this.app.playerMgr.removePlayer(pid);
     cb();
 };
 

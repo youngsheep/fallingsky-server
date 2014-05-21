@@ -1,7 +1,8 @@
 {
     "connector.entryHandler.entry" : {
         "required sInt32 result" : 1,
-        "required uInt32 playerid" : 2
+        "optional uInt32 pid" : 2,
+        "optional string nickname" : 3
     },
 
     "game.roleHandler.register" : {

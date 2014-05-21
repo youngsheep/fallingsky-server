@@ -1,6 +1,6 @@
-var Player = function(uid,username,fid){
-    this.username = username;
+var Player = function(pid,uid,fid){
     this.uid = uid;
+    this.pid = pid;
     this.fid = fid;
 
     this.nickname = "";
@@ -10,8 +10,11 @@ var Player = function(uid,username,fid){
 module.exports = Player;
 
 Player.prototype.loadBaseInfo = function(res){
-    this.username = res.username;
+    this.uid = res.uid;
     this.nickname = res.nickname;
-    this.portrait = res.portrait;
+};
+
+Player.prototype.loadOtherInfo = function(info){
+    this.portrait = info.portrait;
 };
 

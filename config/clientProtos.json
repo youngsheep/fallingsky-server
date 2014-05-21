@@ -1,8 +1,8 @@
 {
     "message ReqMsgHead" : {
         "required uInt32 magic" : 1 ,
-        "required uInt32 playerid" : 2 ,
-        "required string username" : 3
+        "required uInt32 pid" : 2 ,
+        "required string uid" : 3
     },
 
     "connector.entryHandler.entry" : {
