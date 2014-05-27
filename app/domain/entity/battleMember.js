@@ -62,6 +62,7 @@ var BattleMemeber = function(userid){
 BattleMemeber.prototype.generateBlock = function(){
     this.curBlockType = utils.random() % 7;
     this.curBlock = BLOCK_TYPE_VALUE[this.curBlockType];
+    console.log("curBlockType" + this.curBlockType);
 };
 
 BattleMemeber.prototype.fillBlock = function(x, y, flag){
@@ -70,8 +71,8 @@ BattleMemeber.prototype.fillBlock = function(x, y, flag){
     for(var i = 0 ; i < 4 ; i++){
         for(var j  = 0 ; j < 4 ; j++){
             if(block[i*4+j] !== 0) {
-                if((this.blocks[j+y][i+x]) === 0 ) {
-                    this.blocks[j+y][i+x] = block[i*4+j];
+                if((this.blocks[y-j][i+x]) === 0 ) {
+                    this.blocks[y-j][i+x] = block[i*4+j];
                 }
                 else{
                     console.log("error!");

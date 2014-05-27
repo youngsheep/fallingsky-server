@@ -13,13 +13,26 @@ var Handler = function(app) {
 };
 
 Handler.prototype.start = function(msg, session, next) {
+    var player = this.app.playerMgr.getPlayerByPid(session.uid);
+    var battle = null;
+    var btype = msg.type;
+    if(btype === 1){
+        battle = this.app.battleMgr.createBattle(session.uid,-1);
+        battle.type = 1;
+        player.battleid = battle.id;
+
+        var selfbm = battle.getMemberByUid(session.uid);
+        selfbm.generateBlock();
+        next(null,{result:0,battleid:battle.id,firstBlock:selfbm.curBlockType},null);
+        return;
+    }
+
     var matchid = utils.randMatch(session.uid); 
     if(matchid !== -1)
     {
         var oppPlayer = this.app.playerMgr.getPlayerByPid(matchid);
-        var player = this.app.playerMgr.getPlayerByPid(session.uid);
 
-        var battle = this.app.battleMgr.createBattle(session.uid,matchid);
+        battle = this.app.battleMgr.createBattle(session.uid,matchid);
         oppPlayer.battleid = battle.id;
         player.battleid = battle.id;
 
@@ -75,17 +88,19 @@ Handler.prototype.cmd = function(msg, session, next){
     if(bm && bm.fillBlock(msg.xPos,msg.yPos,msg.rotateFlag)){
         bm.generateBlock();
 
-        var uid = {uid:bm.oppid,sid: oppPlayer.fid };
-        console.log(uid);
+        if(bm.oppid !== -1){
+            var uid = {uid:bm.oppid,sid: oppPlayer.fid };
+            console.log(uid);
 
-        var data = {
-            blockXPos : msg.xPos,
-            blockYPos : msg.yPos,
-            blockFlag: msg.rotateFlag,
-            nextType : bm.curBlockType
-        };
-        this.app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);        
-
+            var data = {
+                blockXPos : msg.xPos,
+                blockYPos : msg.yPos,
+                blockFlag: msg.rotateFlag,
+                nextType : bm.curBlockType
+            };
+            this.app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);         
+        }
+       
         next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
     }
     else

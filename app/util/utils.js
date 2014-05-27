@@ -83,14 +83,16 @@ utils.myPrint = function() {
   }
 };
 // print the file name and the line number ~ end
-
 utils.random = function(){
     var rand = 0;
-    crypto.randomBytes(4, function(ex, buf) {  
+    try {
+        var buf = crypto.randomBytes(4);
         rand = buf.readUInt32BE(0);  
         console.log(rand);
-    });  
-    
+    } catch (ex) {
+        // handle error
+    }
+
     return rand;
 };
 
