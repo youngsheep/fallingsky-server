@@ -1,4 +1,4 @@
-var utils = require('../util/utils');
+var utils = require('../../util/utils');
 
 var Player = function(pid,uid,fid){
     this.uid = uid;
