@@ -89,7 +89,6 @@ Handler.prototype.cmd = function(msg, session, next){
     var oppPlayer = this.app.playerMgr.getPlayerByPid(oppid);
 
     if(bm && bm.fillBlock(msg.xPos,msg.yPos,msg.rotateFlag)){
-        bm.generateBlock();
 
         if(bm.oppid !== -1){
             var uid = {uid:bm.oppid,sid: oppPlayer.fid };
@@ -104,6 +103,7 @@ Handler.prototype.cmd = function(msg, session, next){
             this.app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);         
         }
        
+        bm.generateBlock();
         next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
     }
     else
