@@ -21,9 +21,10 @@
     "game.battleHandler.start" : {
          "required sInt32 result" : 1,
          "optional sInt32 battleid" : 2,
-         "optional sInt32 oppId" : 3,
-         "optional string oppName" : 4, 
-         "optional sInt32 firstBlock" : 5
+         "optional sInt32 battleType" : 3,
+         "optional sInt32 oppId" : 4,
+         "optional string oppName" : 5, 
+         "optional sInt32 firstBlock" : 6
     },
 
     "game.battleHandler.cmd" : {
