@@ -2,8 +2,8 @@ var request = require('request');
 var qs = require('querystring');
 var utils = require('../../../util/utils');
 
-var appKey = "2475701841";
-var appSecret = "382769d59920e4a93f6c82c3b2ec38c3";
+var appKey = "2698066879";
+var appSecret = "8adc1284f572439c5577fc38b15cc2d4";
 
 module.exports = function(app) {
   return new Remote(app);

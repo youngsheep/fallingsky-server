@@ -23,7 +23,7 @@ Handler.prototype.start = function(msg, session, next) {
 
         var selfbm = battle.getMemberByUid(session.uid);
         selfbm.generateBlock();
-        next(null,{result:0,battleid:battle.id,firstBlock:selfbm.curBlockType},null);
+        next(null,{result:0,battleid:battle.id,battleType:battle.type,firstBlock:selfbm.curBlockType},null);
         return;
     }
 
@@ -33,6 +33,7 @@ Handler.prototype.start = function(msg, session, next) {
         var oppPlayer = this.app.playerMgr.getPlayerByPid(matchid);
 
         battle = this.app.battleMgr.createBattle(session.uid,matchid);
+        battle.type = 2;
         oppPlayer.battleid = battle.id;
         player.battleid = battle.id;
 
@@ -41,6 +42,7 @@ Handler.prototype.start = function(msg, session, next) {
         var data1 = {
             result : 0,
             battleid : battle.id,
+            battleType : battle.type,
             oppId: matchid,
             oppName : oppPlayer.nickname,
             firstBlock : bm.curBlockType
@@ -55,6 +57,7 @@ Handler.prototype.start = function(msg, session, next) {
         var data2 = {
             result : 0,
             battleid : battle.id,
+            battleType : battle.type,
             oppId: session.uid,
             oppName : player.nickname,
             firstBlock : oppbm.curBlockType
@@ -86,7 +89,6 @@ Handler.prototype.cmd = function(msg, session, next){
     var oppPlayer = this.app.playerMgr.getPlayerByPid(oppid);
 
     if(bm && bm.fillBlock(msg.xPos,msg.yPos,msg.rotateFlag)){
-        bm.generateBlock();
 
         if(bm.oppid !== -1){
             var uid = {uid:bm.oppid,sid: oppPlayer.fid };
@@ -101,6 +103,7 @@ Handler.prototype.cmd = function(msg, session, next){
             this.app.get('channelService').pushMessageByUids('oppstate', data, [uid] , null);         
         }
        
+        bm.generateBlock();
         next(null,{result:0,clearLines:[],nextType:bm.curBlockType},null);
     }
     else

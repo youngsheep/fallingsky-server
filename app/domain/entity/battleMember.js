@@ -71,8 +71,8 @@ BattleMemeber.prototype.fillBlock = function(x, y, flag){
     for(var i = 0 ; i < 4 ; i++){
         for(var j  = 0 ; j < 4 ; j++){
             if(block[i*4+j] !== 0) {
-                if((this.blocks[y-j][i+x]) === 0 ) {
-                    this.blocks[y-j][i+x] = block[i*4+j];
+                if((this.blocks[y-i][j+x]) === 0 ) {
+                    this.blocks[y-i][j+x] = block[i*4+j];
                     if(!((y - j) in changlines)){
                         changelines.push(y-j);
                     }
@@ -122,13 +122,13 @@ BattleMemeber.prototype.rotateBlock = function(flag){
                             block[i*4+j] = this.curBlock[i*4+j];
                             break;
                         case 1:
-                            block[(2-j)*4+i] = this.curBlock[i*4+j];
+                            block[j*4+2-i] = this.curBlock[i*4+j];
                             break;
                         case 2:
                             block[(2-i)*4+2-j] = this.curBlock[i*4+j];
                             break;
                         case 3:
-                            block[j*4+2-i] = this.curBlock[i*4+j];
+                            block[(2-j)*4+i] = this.curBlock[i*4+j];
                             break;
                         default:
                             break;
@@ -145,7 +145,7 @@ BattleMemeber.prototype.rotateBlock = function(flag){
                             block[i*4+j] = this.curBlock[i*4+j];
                             break;
                         case 1:
-                            block[(2-j)*4+i] = this.curBlock[i*4+j];
+                            block[j*4+i] = this.curBlock[(2-i)*4+j];
                             break;
                         default:
                             break;
@@ -161,7 +161,7 @@ BattleMemeber.prototype.rotateBlock = function(flag){
                             block[i*4+j] = this.curBlock[i*4+j];
                             break;
                         case 1:
-                            block[(2-j)*4+i] = this.curBlock[i*4+j];
+                            block[j*4+i] = this.curBlock[(3-i)*4+j];
                             break;
                         default:
                             break;
