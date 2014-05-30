@@ -67,12 +67,15 @@ BattleMemeber.prototype.generateBlock = function(){
 
 BattleMemeber.prototype.fillBlock = function(x, y, flag){
     var block = this.rotateBlock(flag%4);
-
+    var changelines = [];
     for(var i = 0 ; i < 4 ; i++){
         for(var j  = 0 ; j < 4 ; j++){
             if(block[i*4+j] !== 0) {
                 if((this.blocks[y-j][i+x]) === 0 ) {
                     this.blocks[y-j][i+x] = block[i*4+j];
+                    if(!((y - j) in changlines)){
+                        changelines.push(y-j);
+                    }
                 }
                 else{
                     console.log("error!");
